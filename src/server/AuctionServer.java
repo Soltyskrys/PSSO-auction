@@ -4,6 +4,10 @@ import java.rmi.RemoteException;
 
 public class AuctionServer implements IAuctionServer{
 
+	protected AuctionServer() {
+		
+	}
+	
 	@Override
 	public void placeItemForBid(String ownerName, String itemName, String itemDesc, double startBid, int auctionTime)
 			throws RemoteException {
