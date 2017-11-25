@@ -1,23 +1,73 @@
 package server;
 
-public class Item{
+import java.io.Serializable;
+
+public class Item implements Serializable{
+	private double currentBid;
+	private String currentBidderName;
+	private String description;
+	private String name;
+	private String owner;
+	private int remainTime;
+
+	public Item(String ownerName, String itemName, String itemDesc, double startBid, int auctionTime){
+		this.owner = ownerName;
+		this.name = itemName;
+		this.description = itemDesc;
+		this.currentBid = startBid;
+		this.remainTime = auctionTime;
+	}
+
 	public double getCurrentBid() {
-		return 0;
+		return this.currentBid;
 	}
+
+	public void setCurrentBid(double currBid){
+		this.currentBid = currBid;
+	}
+
 	public String getCurrentBidderName() {
-		return null;
+
+		return currentBidderName;
 	}
+
+	public void setCurrentBidderName(String currBidderName){
+		this.currentBidderName = currBidderName;
+	}
+
 	public String getItemDesc() {
-		return null;
+		return this.description;
 	}
-	public String getItemName() {
-		return null;
+
+	public void setItemDescription(String desc){
+		this.description = desc;
 	}
-	public String getOwnerName() {
-		return null;
+
+	public String getItemName()
+	{
+		return this.name;
 	}
+
+	public void setItemName(String n){
+		this.name = n;
+	}
+
+	public String getOwnerName()
+	{
+		return this.owner;
+	}
+
+	public void setOwnerName(String ownerName){
+		this.owner = ownerName;
+	}
+
 	public int getRemainTime() {
-		return 0;
+		return this.remainTime;
 	}
+
+	public void setRemainTime(int remTime){
+		this.remainTime = remTime;
+	}
+
 	
 }

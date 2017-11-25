@@ -1,8 +1,9 @@
 package server;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface IAuctionServer {
+public interface IAuctionServer extends Remote {
 	 public void placeItemForBid(
 			 String ownerName,
 			 String itemName,
@@ -15,4 +16,5 @@ public interface IAuctionServer {
      public Item[] getItems() throws RemoteException; 
      
      public void registerListener(IAuctionListener al, String itemName) throws RemoteException;
+
 }
