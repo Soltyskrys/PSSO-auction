@@ -66,7 +66,8 @@ public class AuctionServer implements IAuctionServer{
 			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
-			Item[] myItems = null;
+			Item[] myItems;
+
 			while(true){
 				Thread.sleep(500);
 				myItems = stub.getItems();
