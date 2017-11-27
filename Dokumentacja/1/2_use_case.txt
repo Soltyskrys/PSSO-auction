@@ -1,0 +1,23 @@
+Nazwa scenariusza: Licytacja przedmiotu
+
+Zdarzenie inicjujące:
+Licytujący wybrał opcję zalicytowania wybranego przedmiotu.
+
+Warunki początkowe:
+- Użytkownik musi potwierdzić swoją tożsamość.
+
+Scenariusz interakcji:
+1. Licytujący wybiera opcję zalicytowania przedmiotu.
+2. Licytujący musi podać swoją tożsamość, nazwę przedmiotu oraz kwotę za którą chce zalicytować przedmiot.
+3. System informuje licytującego o pomyślnym zalicytowaniu przedmiotu. (Wyjątki: "Przedmiot o danej nazwie nie istnieje", "Kwota nie jest wyższa od aktualnie zaproponowanej")
+4. System odnotowuje zmianę aktualnej kwoty dla danego przedmiotu.
+
+Scenariusze alternatywne:
+3a: "Przedmiot o danej nazwie nie istnieje"
+3a1: System informuje o braku przedmiotu o podanej nazwie - podbicie kwoty nie powiodło się.
+
+3b: "Kwota nie jest wyższa od aktualnie zaproponowanej"
+3b1: System informuje licytującego, że zaproponowana przez niego kwota jest zbyt niska i podbicie kwoty nie powiodło się
+
+Warunki końcowe:
+Przedmiot został zalicytowany za daną kwotę przez danego licytującego.
