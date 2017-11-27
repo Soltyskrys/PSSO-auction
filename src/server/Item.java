@@ -69,5 +69,9 @@ public class Item implements Serializable{
 		this.remainTime = remTime;
 	}
 
-	
+	public void decrementTime(){
+		this.remainTime -= 1;
+	}
+
+
 }
