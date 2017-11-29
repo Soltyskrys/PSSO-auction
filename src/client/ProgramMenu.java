@@ -1,10 +1,13 @@
 package client;
 
-import server.IAuctionListener;
 import server.IAuctionServer;
 import server.Item;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
@@ -13,10 +16,10 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 
     Scanner reader;
     T server;
-    IAuctionListener aucListener;
+    Client aucListener;
     String username;
 
-    public ProgramMenu(T server, IAuctionListener a, String username){
+    public ProgramMenu(T server, Client a, String username){
         this.username = username;
         reader = new Scanner(System.in);
         reader.useLocale(Locale.US);
@@ -89,11 +92,9 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             System.out.println("Wrong number! Please select again");
             return;
         }
-        try {
-            aucListener.setStrategy(s);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+
+        aucListener.setStrategy(s);
+
     }
 
     protected void performPlaceItemForBid(){
@@ -168,4 +169,20 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             this.startMenu();
         }
     }
+    
+	public static void main(String args[]) throws RemoteException, NotBoundException {
+		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
+		
+		Registry registry = LocateRegistry.getRegistry(4555);
+
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide your name");
+		String username = reader.next();
+
+		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
+		Client client = new Client(username);
+		UnicastRemoteObject.exportObject(client, 0);
+
+		(new Thread(new ProgramMenu<IAuctionServer>(server, client, username))).start();
+	}
 }

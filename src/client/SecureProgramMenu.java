@@ -1,17 +1,19 @@
 package client;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.InputMismatchException;
+import java.util.Scanner;
 
-import server.AuctionServer;
-import server.IAuctionListener;
-import server.IAuctionServer;
 import server.ISecureLoggableAuctionServer;
-import server.SecureLoggableAuctionServer;
+
 
 public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends ProgramMenu<T> {
 
-	public SecureProgramMenu(T server, IAuctionListener a, String username) {
+	public SecureProgramMenu(T server, Client a, String username) {
 		super(server, a, username);
 	}
 	
@@ -73,5 +75,21 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
         }
 
     }
+	
+	public static void main(String args[]) throws RemoteException, NotBoundException {
+		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
+		Registry registry = LocateRegistry.getRegistry(args[0]);
+		ISecureLoggableAuctionServer server = (ISecureLoggableAuctionServer) registry.lookup("AuctionServer");
+
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide your name");
+		String username = reader.next();
+
+		Client client = new Client(username); 
+		UnicastRemoteObject.exportObject(client, 0);
+
+		(new Thread(new SecureProgramMenu<ISecureLoggableAuctionServer>(server, client, username))).start();
+
+	}
 
 }
