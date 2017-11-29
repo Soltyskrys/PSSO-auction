@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class LoggableAuctionServer extends AuctionServer {
 
-	private FileLogger fileLogger;
+	protected FileLogger fileLogger;
 	LoggableAuctionServer() throws RemoteException {
 		super();
 		fileLogger = new FileLogger("server.log");

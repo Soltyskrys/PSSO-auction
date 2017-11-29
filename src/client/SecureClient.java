@@ -1,34 +1,32 @@
 package client;
 
-import server.AuctionListener;
-import server.AuctionServer;
-import server.IAuctionListener;
-import server.IAuctionServer;
-import server.Item;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Client<T extends IAuctionServer>{
+import server.AuctionListener;
+import server.AuctionServer;
+import server.IAuctionListener;
+import server.IAuctionServer;
+import server.ISecureLoggableAuctionServer;
+import server.SecureLoggableAuctionServer;
 
-	protected T server;
+public class SecureClient<T extends ISecureLoggableAuctionServer> extends Client<ISecureLoggableAuctionServer> {
 
-	public void startNegotiation(Strategy strategy, Item item) {
-		
+	public SecureClient() {
+		super();
 	}
-
+	
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		Registry registry = LocateRegistry.getRegistry(args[0]);
-		AuctionServer server = (AuctionServer) registry.lookup("AuctionServer");
+		ISecureLoggableAuctionServer server = (ISecureLoggableAuctionServer) registry.lookup("AuctionServer");
 		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(), 0);
 
-		(new Thread(new ProgramMenu<AuctionServer>(server, aucListener))).start();
+		(new Thread(new SecureProgramMenu(server, aucListener))).start();
 
 	}
-
 
 }
