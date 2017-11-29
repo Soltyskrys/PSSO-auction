@@ -9,13 +9,13 @@ import java.util.List;
 
 public class AuctionServer implements IAuctionServer{
 
-	private  List<ObservableItem> items;
+	protected  List<ObservableItem> items;
 
 	AuctionServer() throws RemoteException{
 		items = new ArrayList<>();
 	}
 
-	private boolean checkIfItemAlreadyExists(String itemName){
+	protected boolean checkIfItemAlreadyExists(String itemName){
 		for(int i=0;i<items.size();i++){
 			if(items.get(i).getItemName().equals(itemName))
 				return true;
@@ -40,23 +40,25 @@ public class AuctionServer implements IAuctionServer{
 	@Override
 	public void bidOnItem(String bidderName, String itemName, double bid) throws RemoteException {
 
-		System.out.println("User " + bidderName + "make a bid on item " + itemName + " " + bid);
-
+		System.out.println("User " + bidderName + "wants to make a bid on item " + itemName + " " + bid);
 		for (int i=0;i<this.items.size();i++){
 			if(items.get(i).getItemName().equals(itemName)){
 				if(items.get(i).getCurrentBid() < bid) {
-					items.get(i).setCurrentBidderName(bidderName);
-					items.get(i).setCurrentBid(bid);
+					setBidOnItem(bidderName, itemName, bid, i);
 					break;
 				}
 				else{
 					throw new RemoteException("Your bid is lower or equals currentBid");
 				}
-
-
 			}
 		}
 
+	}
+
+	protected void setBidOnItem(String bidderName, String itemName, double bid, int i) {
+		items.get(i).setCurrentBidderName(bidderName);
+		items.get(i).setCurrentBid(bid);
+		System.out.println("User " + bidderName + "made a bid on item " + itemName + " " + bid);
 	}
 
 	@Override
@@ -95,22 +97,26 @@ public class AuctionServer implements IAuctionServer{
 			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
-			Item[] myItems;
-
-			while(true){
-				Thread.sleep(1000);
-				myItems = stub.getItems();
-				stub.decrease();
-				for (int i=0; i<myItems.length;i++) {
-					System.out.println(myItems[i].getItemName() + " "
-							+ myItems[i].getRemainTime() + " "
-							+ myItems[i].getCurrentBid() + " "
-							+ myItems[i].getCurrentBidderName());
-				}
-			}
+			makeProgress(stub);
 		} catch (Exception e) {
 			System.err.println("Exc:");
 			e.printStackTrace();
+		}
+	}
+
+	protected static void makeProgress(IAuctionServer stub) throws InterruptedException, RemoteException {
+		Item[] myItems;
+
+		while(true){
+			Thread.sleep(1000);
+			myItems = stub.getItems();
+			stub.decrease();
+			for (int i=0; i<myItems.length;i++) {
+				System.out.println(myItems[i].getItemName() + " "
+						+ myItems[i].getRemainTime() + " "
+						+ myItems[i].getCurrentBid() + " "
+						+ myItems[i].getCurrentBidderName());
+			}
 		}
 	}
 }

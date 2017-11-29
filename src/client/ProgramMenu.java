@@ -5,6 +5,8 @@ import server.IAuctionServer;
 import server.Item;
 
 import java.rmi.RemoteException;
+import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class ProgramMenu implements Runnable{
@@ -15,6 +17,7 @@ public class ProgramMenu implements Runnable{
 
     public ProgramMenu(IAuctionServer server, IAuctionListener a){
         reader = new Scanner(System.in);
+        reader.useLocale(Locale.US);
         this.server = server;
         this.aucListener = a;
     }
@@ -24,8 +27,12 @@ public class ProgramMenu implements Runnable{
         System.out.println("2. Bid on item");
         System.out.println("3. Register listener");
         System.out.println("4. Show items");
-        int i = reader.nextInt();
-
+        int i;
+        try {
+        	i= reader.nextInt();
+        } catch (InputMismatchException ex) {
+        	i = 0;
+        }
         return i;
 
     }
@@ -74,7 +81,7 @@ public class ProgramMenu implements Runnable{
                     startBid,
                     auctionTime);
         } catch (RemoteException e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         }
 
     }
@@ -92,7 +99,7 @@ public class ProgramMenu implements Runnable{
         try {
             server.bidOnItem(bidderName, itemName, bid);
         } catch (RemoteException e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         }
     }
 
@@ -103,7 +110,7 @@ public class ProgramMenu implements Runnable{
         try {
             server.registerListener(this.aucListener, itemName);
         } catch (RemoteException e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         }
     }
 
@@ -116,7 +123,7 @@ public class ProgramMenu implements Runnable{
             }
 
         } catch (RemoteException e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         }
     }
 
