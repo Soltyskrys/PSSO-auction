@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import client.Client;
@@ -80,12 +81,22 @@ public class AuctionServer implements IAuctionServer{
 
 	@Override
 	public void decrease() {
-		for(int i=0;i<this.items.size();i++){
-			if(this.items.get(i).getRemainTime() > 0){
-				this.items.get(i).decrementTime();
+		for(Iterator<ObservableItem> iter = this.items.iterator(); iter.hasNext();){
+			ObservableItem item = iter.next();
+			if(item.getRemainTime() > 0){
+				item.decrementTime();
+			}
+			else {
+				removeItem(iter);
 			}
 		}
 	}
+	
+	protected void removeItem(Iterator<ObservableItem> iter) {
+		iter.remove();
+		System.out.println("Auction expired");
+	}
+	
 
 	public static void main(String[] args) {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());

@@ -29,7 +29,9 @@ public class AuctionListener implements IAuctionListener {
         if (strategy!=null){
             strategy.update(item);
         }
-        if(item.getRemainTime() != 0){
+
+        if(item.getRemainTime() > 0){
+
             System.out.println("Item: " + item.getItemName() + " was updated. Current bid is " + item.getCurrentBid());
         }
         else {

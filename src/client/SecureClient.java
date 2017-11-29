@@ -8,11 +8,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 import server.AuctionListener;
-import server.AuctionServer;
 import server.IAuctionListener;
-import server.IAuctionServer;
 import server.ISecureLoggableAuctionServer;
-import server.SecureLoggableAuctionServer;
 
 public class SecureClient<T extends ISecureLoggableAuctionServer> extends Client<ISecureLoggableAuctionServer> {
 
