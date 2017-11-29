@@ -11,7 +11,7 @@ public class AuctionListener implements IAuctionListener {
     @Override
     public void update(Item item) throws RemoteException {
 
-        if(item.getRemainTime() == 0){
+        if(item.getRemainTime() > 0){
             System.out.println("Item: " + item.getItemName() + " was updated. Current bid is " + item.getCurrentBid());
         }
         else {
