@@ -11,22 +11,19 @@ import server.SecureLoggableAuctionServer;
 
 public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends ProgramMenu<T> {
 
-	public SecureProgramMenu(T server, IAuctionListener a) {
-		super(server, a);
+	public SecureProgramMenu(T server, IAuctionListener a, String username) {
+		super(server, a, username);
 	}
 	
 	@Override
 	public int showMenu(){
-    	if (username == null) {
-    		System.out.println("Please provide your name");
-    		String name = reader.next();
-    		username = name;
-    	} 
+
         System.out.println("1. Place item on bid");
         System.out.println("2. Bid on item");
         System.out.println("3. Register listener");
         System.out.println("4. Show items");
-        System.out.println("5. Authenticate");
+		System.out.println("5. Select strategy");
+        System.out.println("6. Authenticate");
         int i;
         try {
         	i= reader.nextInt();
@@ -65,9 +62,12 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
 	        	this.performGetItems();
 	        	break;
 	        } case 5:{
-	        	this.authenticate();
+	        	this.performStrategySelection();
 	        	break;
-	        } default: {
+	        } case 6: {
+				this.authenticate();
+				break;
+			}default: {
 	        	System.out.println("Invalid option selected. Please try again");
 	        }
         }

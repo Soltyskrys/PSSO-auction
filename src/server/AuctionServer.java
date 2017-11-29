@@ -55,12 +55,11 @@ public class AuctionServer implements IAuctionServer{
 				}
 			}
 		}
-
 	}
 
 	protected void setBidOnItem(String bidderName, String itemName, double bid, int i) {
-		items.get(i).setCurrentBidderName(bidderName);
 		items.get(i).setCurrentBid(bid);
+		items.get(i).setCurrentBidderName(bidderName);
 		System.out.println("User " + bidderName + "made a bid on item " + itemName + " " + bid);
 	}
 

@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 public class Client<T extends IAuctionServer>{
 
@@ -23,10 +24,15 @@ public class Client<T extends IAuctionServer>{
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		Registry registry = LocateRegistry.getRegistry(args[0]);
-		AuctionServer server = (AuctionServer) registry.lookup("AuctionServer");
-		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(), 0);
 
-		(new Thread(new ProgramMenu<AuctionServer>(server, aucListener))).start();
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide your name");
+		String username = reader.next();
+
+		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
+		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(username), 0);
+
+		(new Thread(new ProgramMenu<IAuctionServer>(server, aucListener, username))).start();
 
 	}
 

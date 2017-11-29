@@ -20,7 +20,7 @@ cd server
 rmiregistry -J-Djava.rmi.server.useCodebaseOnly=false -J$LOG &
 cd ..
 
-javac server/AuctionServer.java
+javac server/SecureLoggableAuctionServer.java
 #rmic server.ComputeEngine
 
 # Make the bytecode available via HTTP server
@@ -28,7 +28,7 @@ python -m SimpleHTTPServer $myHTTPserverPort &
 echo "Press Enter when HTTP server is on..."
 read
 
-java -Djava.rmi.server.codebase=http://$myHTTPserverIP:$myHTTPserverPort/ -Djava.rmi.server.hostname=$myIP -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=java.policy $LOG server.AuctionServer
+java -Djava.rmi.server.codebase=http://$myHTTPserverIP:$myHTTPserverPort/ -Djava.rmi.server.hostname=$myIP -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=java.policy $LOG server.SecureLoggableAuctionServer
 
 # ps
 # kill -TERM 1490

@@ -16,7 +16,8 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
     IAuctionListener aucListener;
     String username;
 
-    public ProgramMenu(T server, IAuctionListener a){
+    public ProgramMenu(T server, IAuctionListener a, String username){
+        this.username = username;
         reader = new Scanner(System.in);
         reader.useLocale(Locale.US);
         this.server = server;
@@ -24,15 +25,13 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
     }
 
     public int showMenu(){
-    	if (username == null) {
-    		System.out.println("Please provide your name");
-    		String name = reader.next();
-    		username = name;
-    	} 
+
         System.out.println("1. Place item on bid");
         System.out.println("2. Bid on item");
         System.out.println("3. Register listener");
         System.out.println("4. Show items");
+        System.out.println("5. Select strategy");
+
         int i;
         try {
         	i= reader.nextInt();
@@ -45,24 +44,56 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 
     public void startMenu(){
         int n = this.showMenu();
-        switch(n) {
-	        case 1:{
-	        	this.performPlaceItemForBid();
-	        	break;
-	        } case 2:{
-	        	this.performBidOnItem();
-	        	break;
-	        } case 3:{
-	        	this.performRegisterListener();
-	        	break;
-	        } case 4:{
-	        	this.performGetItems();
-	        	break;
-	        } default: {
-	        	System.out.println("Invalid option selected. Please try again");
-	        }
-        }
 
+        switch (n) {
+            case 1: {
+                this.performPlaceItemForBid();
+                break;
+            }
+            case 2: {
+                this.performBidOnItem();
+                break;
+            }
+            case 3: {
+                this.performRegisterListener();
+                break;
+            }
+            case 4: {
+                this.performGetItems();
+                break;
+            }
+            case 5: {
+                this.performStrategySelection();
+            }
+            default: {
+                System.out.println("Invalid option selected. Please try again");
+            }
+        }
+    }
+    protected void performStrategySelection(){
+        System.out.println("1. Maximum Bid strategy");
+        System.out.println("2. Last minute strategy");
+        int strategyNumber = reader.nextInt();
+        Strategy s;
+        if(strategyNumber==1){
+            System.out.println("Insert max bid");
+            int maxBid = reader.nextInt();
+
+            s = new MaximumBidStrategy(server);
+            ((MaximumBidStrategy)s).setMaxBid(maxBid);
+        }
+        else if(strategyNumber==2){
+            s = new LastMinuteBidStrategy();
+        }
+        else{
+            System.out.println("Wrong number! Please select again");
+            return;
+        }
+        try {
+            aucListener.setStrategy(s);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void performPlaceItemForBid(){
