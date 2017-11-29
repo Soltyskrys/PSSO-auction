@@ -1,5 +1,5 @@
 ::the client's codebase URL
-SET myHTTPserverIP=192.168.0.21
+SET myHTTPserverIP=192.168.43.19
 
 ::the client's codebase port
 SET myHTTPserverPort=80
