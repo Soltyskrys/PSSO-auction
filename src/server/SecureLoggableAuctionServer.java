@@ -21,6 +21,7 @@ public class SecureLoggableAuctionServer extends LoggableAuctionServer implement
 		userPasswords = new HashMap<>();
 		userPasswords.put("adam", "aaa");
 		userPasswords.put("basia", "bbb");
+		userPasswords.put("zosia", "zzz");
 		authenticatedUsers = new HashSet<>();
 		authenticatedUsers.add("Ala");
 	}

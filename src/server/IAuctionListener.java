@@ -1,6 +1,6 @@
 package server;
 
-import client.Strategy;
+import server.Strategy;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -26,8 +26,14 @@ public class ObservableItem extends Item {
 	protected void notifyClients(String l){
 		for(int i=0;i<listeners.size();i++){
 			try {
-				if(!listeners.get(i).getName().equals(l))
+				if(!listeners.get(i).getName().equals(l)) {
 					listeners.get(i).update(this);
+				}
+				else{
+					System.out.println("!!!!!!!!!!");
+					System.out.println(l);
+					System.out.println("!!!!!");
+				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -36,9 +42,9 @@ public class ObservableItem extends Item {
 
 	@Override
 	public void setCurrentBidderName(String s){
-		String previousBidderName = this.getCurrentBidderName();
 		super.setCurrentBidderName(s);
-		this.notifyClients(previousBidderName);
+		this.notifyClients(this.getCurrentBidderName());
+
 	}
 
 	public void registerListener(IAuctionListener listener) {

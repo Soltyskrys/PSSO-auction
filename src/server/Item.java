@@ -32,7 +32,6 @@ public class Item implements Serializable{
 	}
 
 	public void setCurrentBidderName(String currBidderName){
-		String previousBidderName = this.currentBidderName;
 		this.currentBidderName = currBidderName;
 	}
 

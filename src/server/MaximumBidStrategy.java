@@ -1,4 +1,4 @@
-package client;
+package server;
 
 import java.rmi.RemoteException;
 
@@ -16,9 +16,13 @@ public class MaximumBidStrategy implements Strategy{
 	}
 
 	@Override
-	public void update(Item item) throws RemoteException {
+	public void update(Item item){
 		if(item.getCurrentBid()+1 <= maxBid){
-			auctionServer.bidOnItem(this.newBidder, item.getItemName(), item.getCurrentBid()+1);
+			try {
+				auctionServer.bidOnItem(this.newBidder, item.getItemName(), item.getCurrentBid()+1);
+			} catch (RemoteException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		
 	}

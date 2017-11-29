@@ -17,7 +17,7 @@ public class Client<T extends IAuctionServer>{
 
 	protected T server;
 
-	public void startNegotiation(Strategy strategy, Item item) {
+	public void startNegotiation(Item item) {
 		
 	}
 

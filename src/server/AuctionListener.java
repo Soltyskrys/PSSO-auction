@@ -1,6 +1,6 @@
 package server;
 
-import client.Strategy;
+import server.Strategy;
 
 import java.rmi.RemoteException;
 
@@ -27,6 +27,7 @@ public class AuctionListener implements IAuctionListener {
     @Override
     public void update(Item item) throws RemoteException {
         if (strategy!=null){
+            strategy.setNewBidder(this.name);
             strategy.update(item);
         }
 
