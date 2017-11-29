@@ -26,7 +26,7 @@ public class Client {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		Registry registry = LocateRegistry.getRegistry(args[0]);
 		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
-		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(), 0);
+		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener("Ala"), 0);
 
 		(new Thread(new ProgramMenu(server, aucListener))).start();
 

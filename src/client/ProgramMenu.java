@@ -27,6 +27,8 @@ public class ProgramMenu implements Runnable{
         System.out.println("2. Bid on item");
         System.out.println("3. Register listener");
         System.out.println("4. Show items");
+        System.out.println("5. Select strategy");
+
         int i;
         try {
         	i= reader.nextInt();
@@ -51,10 +53,39 @@ public class ProgramMenu implements Runnable{
         else if(n==4){
             this.performGetItems();
         }
+        else if (n==5){
+            this.performStrategySelection();
+        }
         else{
             System.out.println("Invalid option selected. Please try again");
         }
 
+    }
+
+    private void performStrategySelection(){
+        System.out.println("1. Maximum Bid strategy");
+        System.out.println("2. Last minute strategy");
+        int strategyNumber = reader.nextInt();
+        Strategy s;
+        if(strategyNumber==1){
+            System.out.println("Insert max bid");
+            int maxBid = reader.nextInt();
+
+            s = new MaximumBidStrategy(server);
+            ((MaximumBidStrategy)s).setMaxBid(maxBid);
+        }
+        else if(strategyNumber==2){
+            s = new LastMinuteBidStrategy();
+        }
+        else{
+            System.out.println("Wrong number! Please select again");
+            return;
+        }
+        try {
+            aucListener.setStrategy(s);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private void performPlaceItemForBid(){

@@ -12,6 +12,7 @@ public class ObservableItem extends Item {
 		super(ownerName, itemName, itemDesc, startBid, auctionTime);
 		listeners = new ArrayList<>();
 	}
+
 	protected void notifyClients(){
 		for(int i=0;i<listeners.size();i++){
 			try {
@@ -22,15 +23,24 @@ public class ObservableItem extends Item {
 		}
 	}
 
-	@Override
-	public void setCurrentBid(double b){
-		super.setCurrentBid(b);
-		this.notifyClients();
-
+	protected void notifyClients(String l){
+		for(int i=0;i<listeners.size();i++){
+			try {
+				if(!listeners.get(i).getName().equals(l))
+					listeners.get(i).update(this);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
+	@Override
+	public void setCurrentBidderName(String s){
+		String previousBidderName = this.getCurrentBidderName();
+		super.setCurrentBidderName(s);
+		this.notifyClients(previousBidderName);
+	}
 
-	
 	public void registerListener(IAuctionListener listener) {
 		listeners.add(listener);
 	}
