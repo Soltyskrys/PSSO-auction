@@ -9,13 +9,15 @@ import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class ProgramMenu implements Runnable{
+public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 
     Scanner reader;
-    IAuctionServer server;
+    T server;
     IAuctionListener aucListener;
+    String username;
 
-    public ProgramMenu(IAuctionServer server, IAuctionListener a){
+    public ProgramMenu(T server, IAuctionListener a, String username){
+        this.username = username;
         reader = new Scanner(System.in);
         reader.useLocale(Locale.US);
         this.server = server;
@@ -23,6 +25,7 @@ public class ProgramMenu implements Runnable{
     }
 
     public int showMenu(){
+
         System.out.println("1. Place item on bid");
         System.out.println("2. Bid on item");
         System.out.println("3. Register listener");
@@ -41,28 +44,33 @@ public class ProgramMenu implements Runnable{
 
     public void startMenu(){
         int n = this.showMenu();
-        if(n==1){
-            this.performPlaceItemForBid();
-        }
-        else if(n==2){
-            this.performBidOnItem();
-        }
-        else if(n==3){
-            this.performRegisterListener();
-        }
-        else if(n==4){
-            this.performGetItems();
-        }
-        else if (n==5){
-            this.performStrategySelection();
-        }
-        else{
-            System.out.println("Invalid option selected. Please try again");
-        }
 
+        switch (n) {
+            case 1: {
+                this.performPlaceItemForBid();
+                break;
+            }
+            case 2: {
+                this.performBidOnItem();
+                break;
+            }
+            case 3: {
+                this.performRegisterListener();
+                break;
+            }
+            case 4: {
+                this.performGetItems();
+                break;
+            }
+            case 5: {
+                this.performStrategySelection();
+            }
+            default: {
+                System.out.println("Invalid option selected. Please try again");
+            }
+        }
     }
-
-    private void performStrategySelection(){
+    protected void performStrategySelection(){
         System.out.println("1. Maximum Bid strategy");
         System.out.println("2. Last minute strategy");
         int strategyNumber = reader.nextInt();
@@ -88,9 +96,7 @@ public class ProgramMenu implements Runnable{
         }
     }
 
-    private void performPlaceItemForBid(){
-        System.out.println("Insert owner name");
-        String ownerName = reader.next();
+    protected void performPlaceItemForBid(){
 
         System.out.println("Insert item name");
         String itemName = reader.next();
@@ -103,10 +109,10 @@ public class ProgramMenu implements Runnable{
 
         System.out.println("Insert item auction time");
         int auctionTime = reader.nextInt();
-
+        
 
         try {
-            server.placeItemForBid(ownerName,
+            server.placeItemForBid(username,
                     itemName,
                     itemDescr,
                     startBid,
@@ -117,9 +123,7 @@ public class ProgramMenu implements Runnable{
 
     }
 
-    private void performBidOnItem(){
-        System.out.println("Insert bidder name");
-        String bidderName = reader.next();
+    protected void performBidOnItem(){
 
         System.out.println("Insert item name");
         String itemName = reader.next();
@@ -128,13 +132,13 @@ public class ProgramMenu implements Runnable{
         double bid = reader.nextDouble();
 
         try {
-            server.bidOnItem(bidderName, itemName, bid);
+            server.bidOnItem(username, itemName, bid);
         } catch (RemoteException e) {
         	System.out.println(e.getMessage());
         }
     }
 
-    private void performRegisterListener(){
+    protected void performRegisterListener(){
         System.out.println("Insert item name");
         String itemName = reader.next();
 
@@ -145,7 +149,7 @@ public class ProgramMenu implements Runnable{
         }
     }
 
-    private void performGetItems(){
+    protected void performGetItems(){
         try {
             Item[] items = server.getItems();
 

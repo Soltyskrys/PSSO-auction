@@ -11,7 +11,7 @@ SET LOG=-Dsun.rmi.loader.logLevel=BRIEF
 
 del /S client\*.class
 del /S server\*.class
-javac client/Client.java
+javac client/SecureClient.java
 
 start /B hfs.exe client
 @echo.
@@ -19,5 +19,5 @@ start /B hfs.exe client
 @echo.
 @pause
 
-java -Djava.rmi.server.codebase=http://%myHTTPserverIP%:%myHTTPserverPort%/ -Djava.security.policy=java.policy -Djava.rmi.server.useCodebaseOnly=false %LOG% client.Client %RMIserverIP% 23
+java -Djava.rmi.server.codebase=http://%myHTTPserverIP%:%myHTTPserverPort%/ -Djava.security.policy=java.policy -Djava.rmi.server.useCodebaseOnly=false %LOG% client.SecureClient %RMIserverIP% 23
 

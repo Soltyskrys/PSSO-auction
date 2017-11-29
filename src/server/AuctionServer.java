@@ -7,6 +7,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.Client;
+
 public class AuctionServer implements IAuctionServer{
 
 	protected  List<ObservableItem> items;
