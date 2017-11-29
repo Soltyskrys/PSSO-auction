@@ -6,7 +6,7 @@ C:\java\jdk\bin\rmiregistry.exe -J-Djava.rmi.server.useCodebaseOnly=false
 2. ServerUserInterface:
 VM arguments:
 -Djava.security.policy=policy
--Djava.rmi.server.codebase=file:C:/Users/dblab/workspace/ChatV0_OO/bin/
+-Djava.rmi.server.codebase=file:C:/Users/Krystian/Desktop/PSSO/bin
 -Djava.rmi.server.useCodebaseOnly=false
 
 
@@ -17,5 +17,5 @@ ania
 
 VM arguments:
 -Djava.security.policy=policy
--Djava.rmi.server.codebase=file:C:/Users/dblab/workspace/ChatV0_OO/bin/
+-Djava.rmi.server.codebase=file:C:/Users/Krystian/Desktop/PSSO/bin
 -Djava.rmi.server.useCodebaseOnly=false

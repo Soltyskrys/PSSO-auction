@@ -22,13 +22,13 @@ public class Client<T extends IAuctionServer>{
 
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
-		Registry registry = LocateRegistry.getRegistry(args[0]);
-		AuctionServer server = (AuctionServer) registry.lookup("AuctionServer");
+
+		Registry registry = LocateRegistry.getRegistry(4555);
+		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
+
 		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(), 0);
 
-		(new Thread(new ProgramMenu<AuctionServer>(server, aucListener))).start();
+		(new Thread(new ProgramMenu(server, aucListener))).start();
 
 	}
-
-
 }
