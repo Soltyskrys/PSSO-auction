@@ -195,12 +195,12 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		
 		Registry registry = LocateRegistry.getRegistry(45555);
-
+        IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Please provide your name");
 		String username = reader.next();
 
-		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
+
 		Client client = new Client(username);
 		UnicastRemoteObject.exportObject(client, 0);
 
