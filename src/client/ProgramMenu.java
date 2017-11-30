@@ -2,7 +2,11 @@ package client;
 
 import server.*;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
@@ -11,10 +15,10 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 
     Scanner reader;
     T server;
-    IAuctionListener aucListener;
+    Client aucListener;
     String username;
 
-    public ProgramMenu(T server, IAuctionListener a, String username){
+    public ProgramMenu(T server, Client a, String username){
         this.username = username;
         reader = new Scanner(System.in);
         reader.useLocale(Locale.US);
@@ -68,27 +72,25 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             }
         }
     }
-    protected void performStrategySelection(){
+    protected void performStrategySelection() {
         System.out.println("1. Maximum Bid strategy");
         System.out.println("2. Last minute strategy");
         int strategyNumber = reader.nextInt();
         Strategy s;
         System.out.println("Insert item name");
         String itemName = reader.next();
-        if(strategyNumber==1){
+        if (strategyNumber == 1) {
             System.out.println("Insert max bid");
             int maxBid = reader.nextInt();
 
             s = new MaximumBidStrategy(server);
-            ((MaximumBidStrategy)s).setMaxBid(maxBid);
-        }
-        else if(strategyNumber==2){
+            ((MaximumBidStrategy) s).setMaxBid(maxBid);
+        } else if (strategyNumber == 2) {
             Item item = getItemBasedOnName(itemName);
 
             s = new LastMinuteBidStrategy(server, item, username);
 
-        }
-        else{
+        } else {
             System.out.println("Wrong number! Please select again");
             return;
         }
@@ -189,4 +191,19 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
         return null;
     }
 
+	public static void main(String args[]) throws RemoteException, NotBoundException {
+		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
+		
+		Registry registry = LocateRegistry.getRegistry(4555);
+
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Please provide your name");
+		String username = reader.next();
+
+		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
+		Client client = new Client(username);
+		UnicastRemoteObject.exportObject(client, 0);
+
+		(new Thread(new ProgramMenu<IAuctionServer>(server, client, username))).start();
+	}
 }

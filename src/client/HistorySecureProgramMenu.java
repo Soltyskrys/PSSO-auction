@@ -8,12 +8,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import server.ISecureLoggableAuctionServer;
+import server.IHistorySecureLoggableAuctionServer;
 
+public class HistorySecureProgramMenu<T extends IHistorySecureLoggableAuctionServer> extends SecureProgramMenu<T> {
 
-public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends ProgramMenu<T> {
-
-	public SecureProgramMenu(T server, Client a, String username) {
+	public HistorySecureProgramMenu(T server, Client a, String username) {
 		super(server, a, username);
 	}
 	
@@ -26,6 +25,7 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
         System.out.println("4. Show items");
 		System.out.println("5. Select strategy");
         System.out.println("6. Authenticate");
+        System.out.println("7. Get your costs summary");
         int i;
         try {
         	i= reader.nextInt();
@@ -35,17 +35,6 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
         return i;
     }
 	
-	protected void authenticate() {
-		System.out.println("Please provide password or type 'exit' to cancel");
-		String password = reader.next();
-		if (!password.equals("exit")) {
-			try {
-				server.authenticateUser(username, password);
-			} catch (RemoteException e) {
-				authenticate();
-			}
-		}
-	}
 
 	@Override
     public void startMenu(){
@@ -69,26 +58,37 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
 	        } case 6: {
 				this.authenticate();
 				break;
+			} case 7: {
+				performGetUserCostsSummary();
+				break;
 			}default: {
 	        	System.out.println("Invalid option selected. Please try again");
 	        }
         }
-
+    }
+	
+	protected void performGetUserCostsSummary(){
+        try {
+           double costs = server.getUserCosts(username);
+           System.out.println("Your costs are: "+costs);
+        } catch (RemoteException e) {
+        	System.out.println(e.getMessage());
+        }
     }
 	
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		Registry registry = LocateRegistry.getRegistry(args[0]);
-		ISecureLoggableAuctionServer server = (ISecureLoggableAuctionServer) registry.lookup("AuctionServer");
+		IHistorySecureLoggableAuctionServer server = (IHistorySecureLoggableAuctionServer) registry.lookup("AuctionServer");
 
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Please provide your name");
 		String username = reader.next();
 
-		Client client = new Client(username); 
+		Client client = new Client(username);
 		UnicastRemoteObject.exportObject(client, 0);
 
-		(new Thread(new SecureProgramMenu<ISecureLoggableAuctionServer>(server, client, username))).start();
+		(new Thread(new HistorySecureProgramMenu<IHistorySecureLoggableAuctionServer>(server, client, username))).start();
 
 	}
 

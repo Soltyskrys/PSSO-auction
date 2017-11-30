@@ -1,5 +1,6 @@
 package server;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -44,14 +45,16 @@ public class LoggableAuctionServer extends AuctionServer {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		try {
 			String name = "AuctionServer";
-			IAuctionServer engine = new LoggableAuctionServer();
-			IAuctionServer stub = (IAuctionServer) UnicastRemoteObject.exportObject(engine, 0);
-			stub.placeItemForBid("Ala", "Rower", "Super rower", 1000.00, 3000);
+			LoggableAuctionServer engine = new LoggableAuctionServer();
+			engine.placeItemForBid("Ala", "Rower", "Super rower", 1000.00, 3000);
+			
+		    Remote stub = UnicastRemoteObject.exportObject(engine, 0);
 
-			Registry registry = LocateRegistry.getRegistry();
+		    LocateRegistry.createRegistry(4555);
+			Registry registry = LocateRegistry.getRegistry(4555);
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
-			makeProgress(stub);
+			makeProgress(engine);
 		} catch (Exception e) {
 			System.err.println("Exc:");
 			e.printStackTrace();

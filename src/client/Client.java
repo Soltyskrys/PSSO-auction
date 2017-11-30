@@ -1,40 +1,46 @@
 package client;
 
-import server.AuctionListener;
-import server.AuctionServer;
+import server.Strategy;
 import server.IAuctionListener;
-import server.IAuctionServer;
 import server.Item;
 
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
-public class Client<T extends IAuctionServer>{
 
-	protected T server;
+public class Client implements IAuctionListener {
 
-	public void startNegotiation(Item item) {
-		
-	}
+    private Strategy strategy;
+    private String name;
 
-	public static void main(String args[]) throws RemoteException, NotBoundException {
-		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
-		Registry registry = LocateRegistry.getRegistry(args[0]);
+    public Client(String name){
+        this.name = name;
+        strategy = null;
+    }
 
-		Scanner reader = new Scanner(System.in);
-		System.out.println("Please provide your name");
-		String username = reader.next();
+    @Override
+    public void setStrategy(Strategy s){
+        this.strategy = s;
+    }
 
-		IAuctionServer server = (IAuctionServer) registry.lookup("AuctionServer");
-		IAuctionListener aucListener = (IAuctionListener) UnicastRemoteObject.exportObject(new AuctionListener(username), 0);
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-		(new Thread(new ProgramMenu<IAuctionServer>(server, aucListener, username))).start();
+    @Override
+    public void update(Item item) throws RemoteException {
+        if (strategy!=null){
+            strategy.setNewBidder(this.name);
+            strategy.update(item);
+        }
 
-	}
+        if(item.getRemainTime() > 0){
 
+            System.out.println("Item: " + item.getItemName() + " was updated. Current bid is " + item.getCurrentBid());
+        }
+        else {
+            System.out.println("Item: " + item.getItemName() + ". Auction expired");
+        }
+    }
 
 }

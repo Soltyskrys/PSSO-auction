@@ -1,5 +1,5 @@
 ::the client's codebase URL
-SET myHTTPserverIP=192.168.0.21
+SET myHTTPserverIP=42.0.202.123
 
 ::the client's codebase port
 SET myHTTPserverPort=80
@@ -11,7 +11,7 @@ SET LOG=-Dsun.rmi.loader.logLevel=BRIEF
 
 del /S client\*.class
 del /S server\*.class
-javac client/SecureClient.java
+javac client/ProgramMenu.java
 
 start /B hfs.exe client
 @echo.
@@ -19,5 +19,5 @@ start /B hfs.exe client
 @echo.
 @pause
 
-java -Djava.rmi.server.codebase=http://%myHTTPserverIP%:%myHTTPserverPort%/ -Djava.security.policy=java.policy -Djava.rmi.server.useCodebaseOnly=false %LOG% client.SecureClient %RMIserverIP% 23
+java -Djava.rmi.server.codebase=http://%myHTTPserverIP%:%myHTTPserverPort%/ -Djava.security.policy=java.policy -Djava.rmi.server.useCodebaseOnly=false %LOG% client.ProgramMenu %RMIserverIP% 23
 
