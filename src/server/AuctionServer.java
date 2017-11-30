@@ -1,5 +1,6 @@
 package server;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -103,13 +104,13 @@ public class AuctionServer implements IAuctionServer{
 		try {
 			String name = "AuctionServer";
 			IAuctionServer engine = new AuctionServer();
-			IAuctionServer stub = (IAuctionServer) UnicastRemoteObject.exportObject(engine, 0);
-			stub.placeItemForBid("Ala", "Rower", "Super rower", 1000.00, 3000);
+			Remote stub =  UnicastRemoteObject.exportObject(engine, 0);
+			engine.placeItemForBid("Ala", "Rower", "Super rower", 1000.00, 3000);
 
 			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
-			makeProgress(stub);
+			makeProgress(engine);
 		} catch (Exception e) {
 			System.err.println("Exc:");
 			e.printStackTrace();
