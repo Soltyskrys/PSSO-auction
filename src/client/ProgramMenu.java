@@ -1,11 +1,6 @@
 package client;
 
-import server.IAuctionListener;
-import server.IAuctionServer;
-import server.Item;
-import server.Strategy;
-import server.LastMinuteBidStrategy;
-import server.MaximumBidStrategy;
+import server.*;
 
 import java.rmi.RemoteException;
 import java.util.InputMismatchException;
@@ -88,7 +83,10 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             ((MaximumBidStrategy)s).setMaxBid(maxBid);
         }
         else if(strategyNumber==2){
-            s = new LastMinuteBidStrategy(server);
+            Item item = getItemBasedOnName(itemName);
+
+            s = new LastMinuteBidStrategy(server, item, username);
+
         }
         else{
             System.out.println("Wrong number! Please select again");
@@ -174,4 +172,21 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             this.startMenu();
         }
     }
+
+    protected Item getItemBasedOnName(String n){
+        try {
+            Item[] items = server.getItems();
+
+            for(int i=0;i<items.length;i++){
+                if(items[i].getItemName().equals(n)){
+                    return items[i];
+                }
+            }
+
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
 }

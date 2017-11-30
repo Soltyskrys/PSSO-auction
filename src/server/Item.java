@@ -8,7 +8,7 @@ public class Item implements Serializable{
 	private String description;
 	private String name;
 	private String owner;
-	private int remainTime;
+	private volatile int remainTime;
 
 	public Item(String ownerName, String itemName, String itemDesc, double startBid, int auctionTime){
 		this.owner = ownerName;
@@ -61,11 +61,11 @@ public class Item implements Serializable{
 		this.owner = ownerName;
 	}
 
-	public int getRemainTime() {
+	public synchronized int getRemainTime() {
 		return this.remainTime;
 	}
 
-	public void setRemainTime(int remTime){
+	public synchronized void setRemainTime(int remTime){
 		this.remainTime = remTime;
 	}
 
