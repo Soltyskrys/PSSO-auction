@@ -88,7 +88,7 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
             ((MaximumBidStrategy)s).setMaxBid(maxBid);
         }
         else if(strategyNumber==2){
-            s = new LastMinuteBidStrategy();
+            s = new LastMinuteBidStrategy(server);
         }
         else{
             System.out.println("Wrong number! Please select again");
