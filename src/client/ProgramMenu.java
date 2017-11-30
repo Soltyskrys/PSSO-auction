@@ -14,10 +14,10 @@ import java.util.Scanner;
 
 public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 
-    Scanner reader;
-    T server;
-    Client aucListener;
-    String username;
+    protected Scanner reader;
+    protected T server;
+    protected Client aucListener;
+    protected String username;
 
     public ProgramMenu(T server, Client a, String username){
         this.username = username;
