@@ -107,7 +107,8 @@ public class AuctionServer implements IAuctionServer{
 			Remote stub =  UnicastRemoteObject.exportObject(engine, 0);
 			engine.placeItemForBid("Ala", "Rower", "Super rower", 1000.00, 3000);
 
-			Registry registry = LocateRegistry.getRegistry();
+			LocateRegistry.createRegistry(45555);
+			Registry registry = LocateRegistry.getRegistry(45555);
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
 			makeProgress(engine);

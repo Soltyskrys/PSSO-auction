@@ -194,7 +194,7 @@ public class ProgramMenu<T extends IAuctionServer> implements Runnable{
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
 		
-		Registry registry = LocateRegistry.getRegistry(4555);
+		Registry registry = LocateRegistry.getRegistry(45555);
 
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Please provide your name");

@@ -78,7 +78,7 @@ public class SecureProgramMenu <T extends ISecureLoggableAuctionServer> extends 
 	
 	public static void main(String args[]) throws RemoteException, NotBoundException {
 		if (System.getSecurityManager() == null) System.setSecurityManager(new SecurityManager());
-		Registry registry = LocateRegistry.getRegistry(args[0]);
+		Registry registry = LocateRegistry.getRegistry(45555);
 		ISecureLoggableAuctionServer server = (ISecureLoggableAuctionServer) registry.lookup("AuctionServer");
 
 		Scanner reader = new Scanner(System.in);

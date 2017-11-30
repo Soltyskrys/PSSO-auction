@@ -67,8 +67,9 @@ public class HistorySecureLoggableAuctionServer extends SecureLoggableAuctionSer
 			engine.placeItemForBid("Ala", "Rower", "Super rower", 10.00, 50);
 			engine.placeItemForBid("Ala", "Rower2", "Super rower", 10.00, 70);
 			engine.placeItemForBid("Ala", "Rower3", "Super rower", 10.00, 100);
+			LocateRegistry.createRegistry(45555);
+			Registry registry = LocateRegistry.getRegistry(45555);
 
-			Registry registry = LocateRegistry.getRegistry();
 			registry.rebind(name, stub);
 			System.out.println("Server program bound");
 			makeProgress(engine);
